@@ -111,15 +111,15 @@ $(window).on('ready', function() {
     var midiInIdx = parseInt($('#midi-ins').val(), 10);
     var midiOutIdx = parseInt($('#midi-outs').val(), 10);
     var module = modules[$('#modules').val()];
-    var opts = $.extend(module, {
+    var opts = {
       serialoscId: $('#serial').val(),
       name: $('#name').val(),
       prefix: $('#prefix').val(),
       midiIn: input.getPortName(midiInIdx),
       midiOut: output.getPortName(midiOutIdx)
-    });
-    console.log(opts);
+    };
     var emulator = new midigrid(opts);
+    emulator = $.extend(emulator, module);
     emulator.start();
     var removeBtn = $('<button>Stop ' + $('#serial').val() + '</button>');
     removeBtn.on('click', function() {
