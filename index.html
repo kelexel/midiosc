@@ -1,0 +1,135 @@
+<html>
+<head>
+<title>midiosc</title>
+<style>
+body {
+  font-family: verdana;
+}
+label {
+  width: 150px;
+  display: inline-block;
+  text-align: right;
+}
+button {
+  margin-left: 158px;
+}
+.option {
+  display: block;
+}
+</style>
+</head>
+<body>
+  <div class="option">
+    <label for="serial">Serial Number</label>
+    <input id="serial" value="m40h0001" type="text"></input>
+  </div>
+  <div class="option">
+    <label for="name">Zeroconf Name</label>
+    <input id="name" type="text" value="monome 64 (m40h0001)"></input>
+  </div>
+  <div class="option">
+    <label for="prefix">Prefix</label>
+    <input id="prefix" type="text" value="/monome"></input>
+  </div>
+  <div class="option">
+    <label for="midi-ins">MIDI Input</label>
+    <select id="midi-ins"></select>
+  </div>
+  <div class="option">
+    <label for="midi-outs">MIDI Output</label>
+    <select id="midi-outs"></select>
+  </div>
+  <div class="option">
+    <label for="modules">Emulator Module</label>
+    <select id="modules"></select>
+  </div>
+  <button id="add-btn">Add</button>
+
+  <div id="running-emulators"></div>
+</body>
+<script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script>
+    
+<script>
+$(window).on('ready', function() {
+
+  var midigrid = require('midigrid');
+  var midi = require('midi');
+
+  var modules = {
+    launchpad: {
+      _serialoscMapFunc: function(noteNum) {
+        var x = noteNum % 8;
+        var y = Math.floor(noteNum / 8);
+        console.log('press event: converted note ' + noteNum + ' to ' + x + ', ' + y)
+        return [x, y];
+      },
+
+      // this should map an x/y coordinate to a midi note number
+      _midiMapFunc: function(data) {
+        var noteNum = data.x + (data.y * 8);
+        console.log('led event: converted ' + data.x + ', ' + data.y + ' to note ' + noteNum);
+        return noteNum;
+      },
+
+      // the velocity to use when turning a led on
+      _velocityOn: function(data) {
+        return 127;
+      },
+      
+      // the velocity to use when turning a led off
+      _velocityOff: function(data) {
+        return 0;
+      }
+    }
+  };
+
+  var input = new midi.input();
+  var output = new midi.output();
+
+  for (var i = 0; i < input.getPortCount(); i++) {
+    var option = $('<option></option>');
+    option.text(input.getPortName(i));
+    option.val(i);
+    $('#midi-ins').append(option);
+  }
+
+  for (var i = 0; i < output.getPortCount(); i++) {
+    var option = $('<option></option>');
+    option.text(output.getPortName(i));
+    option.val(i);
+    $('#midi-outs').append(option);
+  }
+
+  for (var key in modules) {
+    var option = $('<option></option>');
+    option.text(key);
+    option.val(key);
+    $('#modules').append(option);
+  }
+
+  $('#add-btn').on('click', function() {
+    var midiInIdx = parseInt($('#midi-ins').val(), 10);
+    var midiOutIdx = parseInt($('#midi-outs').val(), 10);
+    var module = modules[$('#modules').val()];
+    var opts = $.extend(module, {
+      serialoscId: $('#serial').val(),
+      name: $('#name').val(),
+      prefix: $('#prefix').val(),
+      midiIn: input.getPortName(midiInIdx),
+      midiOut: output.getPortName(midiOutIdx)
+    });
+    console.log(opts);
+    var emulator = new midigrid(opts);
+    emulator.start();
+    var removeBtn = $('<button>Stop ' + $('#serial').val() + '</button>');
+    removeBtn.on('click', function() {
+      emulator.stop();
+      removeBtn.remove();
+    });
+    $('#running-emulators').append(removeBtn);
+  });
+
+});
+</script>
+
+</html>

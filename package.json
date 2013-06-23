@@ -1,0 +1,8 @@
+{
+  "name": "midiosc",
+  "main": "index.html",
+  "dependencies": {
+    "midi": "*",
+    "midigrid": "git://github.com/kelexel/node-midigrid.git#master"
+  }
+}
