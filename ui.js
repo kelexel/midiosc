@@ -1,5 +1,8 @@
+var prime = require('prime');
+var midigrid = require('midigrid');
 var modules = {
-   launchpad: {
+   launchpad: prime({
+   	inherits: midigrid,
      _serialoscMapFunc: function(noteNum) {
        var x = noteNum % 8;
        var y = Math.floor(noteNum / 8);
@@ -20,7 +23,7 @@ var modules = {
      _velocityOff: function(data) {
        return 0;
      }
-   }
+   })
 };
 
 
@@ -87,7 +90,6 @@ var Ui = new Class({
 		if (!midiInIdx) midiInIdx = 0;
 		if (!midiOutIdx) midiOutIdx = 0;
 		if (!module) module = 0;
-		// alert('midiInIdx: '+midiInIdx+', midiOutIdx: '+midiOutIdx+ ', module: '+module);
 
 		var opts = {
 			serialoscId: document.id('deviceSerial').get('value'),
@@ -96,11 +98,11 @@ var Ui = new Class({
 			midiIn: this._midiPorts.input.getPortName(midiInIdx),
 			midiOut: this._midiPorts.output.getPortName(midiOutIdx)
 		};
-		var midigrid = require('midigrid');
 		var emulator = new midigrid(opts);
 // //		emulator = $.extend(emulator, module);
 		emulator.start();
 		this._devices[emulator._attributes.id] = emulator;
+		this._debug('Emulator '+opts.name+' created');
 		var removeBtn = new Element('button', {'type': 'button', 'class': 'remove', 'rel': emulator._attributes.id, 'html': 'Stop '+opts.name}).inject(document.id('running-emulators'));
 	},
 	_eventRemoveDevice: function(e, el) {
@@ -115,6 +117,9 @@ var Ui = new Class({
 		this._bound._eventRemoveDevice = this._eventRemoveDevice.bind(this);
 		document.id('running-emulators').addEvent('click:relay(button.remove)', this._bound._eventRemoveDevice);
 		return this;
+	},
+	_debug: function(str) {
+		if (!console || !console.log) return;
+		console.log(str);
 	}
 });
-alert('ui.js loaded');
