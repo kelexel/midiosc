@@ -2,23 +2,60 @@
 <head>
 <title>midiosc</title>
 <style>
+html, body {
+  height: 90%;
+}
 body {
-  font-family: verdana;
+  font-family: arial;
+  background-color: #eee;
 }
 label {
   width: 150px;
+  font-size: 11px;
+  padding-right: 10px;
   display: inline-block;
   text-align: right;
+  background-color: #333;
+  color: #eee;
+  height: 22px;
+  line-height: 22px;
 }
 button {
 }
+#head {
+  background-color: #333;
+  border: 1px #000 solid;
+  color: #888;
+}
+#head h1 {
+  font-size: 14px;
+  padding: 5px;
+  margin: 0;
+}
+#addNewDevice {
+  float: right;
+  margin-top: 4px;
+}
+h2 {
+  font-size: 12px;
+  padding: 5px;
+  margin: 0;
+  margin-top: 5px;
+}
+form {
+  margin: 0 auto 20px;
+  width: 60%;
+}
 .option {
   display: block;
+  height: 22px;
+  margin: 0 0 5px;
 }
 #running-emulators {
   margin: 0;
   padding: 0;
   width: 100%;
+  height: 100%;
 }
 #running-emulators li {
   display: inline-block;
@@ -70,12 +107,28 @@ button {
   vertical-align: middle;
   margin-left: 5px;
 }
+#footer {
+  text-align: left;
+  font-size: 12px;
+}
+#footer button {
+}
 </style>
 </head>
 <body>
+  <div id="head">
+    <button type="button" id="addNewDevice">Add a new device</button>
+    <h1>midiosc<small>v 0.1</small></h1>
+  </div>
   <div id="loading">Init please wait..</div>
   <div id="emu"></div>
   <ul id="running-emulators"></ul>
+  <div id="footer">
+    <div class="config">
+        Config: 
+        <button type="button" id="saveConfig">Save</button> | <input type="file" class="fright" id="loadConfig" accept="application/json" />
+    </div>
+  </div>
 </body>
 <script src="lib/htdocs/mootools-core-full-compat-yc.js"></script>
 <script src="lib/htdocs/ui.js"></script>
