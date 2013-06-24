@@ -11,17 +11,66 @@ label {
   text-align: right;
 }
 button {
-  margin-left: 158px;
 }
 .option {
   display: block;
+}
+#running-emulators li {
+  display: inline-block;
+  width: 44%;
+  padding: 2%;
+  margin: 2%;
+  outline: 1px #ccc solid;
+}
+#running-emulators li p.title {
+  font-size: 12px;
+  font-weight: bold;
+  text-align: center;
+}
+#running-emulators li p.row {
+  font-size: 11px;
+}
+#running-emulators li p.row span {
+  display: block;
+}
+#running-emulators li p.row em {
+  font-weight: bold;
+}
+
+#running-emulators li p.activity {
+  display: inline-block;
+  width: 48%;
+  padding: 1%;
+  text-align: center;
+  vertical-align: top;
+  background-color: #eee;
+}
+#running-emulators li p.activity span.title {
+  width: 100%;
+  display: block;
+}
+#running-emulators li p.activity span.direction {
+  display: inline-block;
+  width: 46%;
+  vertical-align: middle;
+  margin:0;
+  padding:2%;
+}
+#running-emulators li p.activity span.direction span.state {
+  font-size: 10px;
+  display: inline-block;
+  width: 4px;
+  height: 4px;
+  border: 2px #666 solid;
+  vertical-align: middle;
+  margin-left: 5px;
 }
 </style>
 </head>
 <body>
   <div id="emu"><div id="loading">Init please wait..</div></div>
 
-  <div id="running-emulators"></div>
+  <ul id="running-emulators"></ul>
 </body>
 <script src="lib/htdocs/mootools-core-full-compat-yc.js"></script>
 <script src="lib/htdocs/ui.js"></script>

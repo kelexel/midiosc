@@ -1,0 +1,6 @@
+.DS_Store
+app.zip
+app/
+node-webkit.app/
+node_modules/
+
